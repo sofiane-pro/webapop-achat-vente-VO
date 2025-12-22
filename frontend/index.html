@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebApp Vente Véhicules d'Occasion</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+  <header class="bg-blue-600 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Vente de Véhicules d'Occasion</h1>
+      <nav>
+        <a href="index.html" class="mr-4">Accueil</a>
+        <a href="login.html">Connexion</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container mx-auto p-4">
+    <div class="mb-8">
+      <h2 class="text-xl font-semibold mb-4">Filtres</h2>
+      <div class="flex gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Marque</label>
+          <select id="brandFilter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+            <option value="">Toutes les marques</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Prix max</label>
+          <input type="number" id="priceFilter" placeholder="Prix max" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+        </div>
+        <button id="applyFilters" class="self-end bg-blue-600 text-white px-4 py-2 rounded-md">Appliquer</button>
+      </div>
+    </div>
+
+    <div id="vehiclesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Vehicles will be loaded here -->
+    </div>
+  </main>
+
+  <script>
+    const vehiclesGrid = document.getElementById('vehiclesGrid');
+    const brandFilter = document.getElementById('brandFilter');
+    const priceFilter = document.getElementById('priceFilter');
+    const applyFilters = document.getElementById('applyFilters');
+
+    let allVehicles = [];
+    let brands = new Set();
+
+    // Load vehicles
+    async function loadVehicles() {
+      try {
+        const response = await fetch('http://localhost:3001/api/vehicles');
+        if (!response.ok) throw new Error('Erreur réseau');
+        allVehicles = await response.json();
+        allVehicles.forEach(vehicle => brands.add(vehicle.brand));
+        populateBrandFilter();
+        displayVehicles(allVehicles);
+      } catch (error) {
+        console.error('Erreur:', error);
+        vehiclesGrid.innerHTML = '<p class="text-red-500">Erreur de chargement des véhicules.</p>';
+      }
+    }
+
+    // Populate brand filter
+    function populateBrandFilter() {
+      brands.forEach(brand => {
+        const option = document.createElement('option');
+        option.value = brand;
+        option.textContent = brand;
+        brandFilter.appendChild(option);
+      });
+    }
+
+    // Display vehicles
+    function displayVehicles(vehicles) {
+      vehiclesGrid.innerHTML = '';
+      vehicles.forEach(vehicle => {
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-lg shadow-md overflow-hidden';
+        card.innerHTML = `
+          <img src="${vehicle.image}" alt="${vehicle.brand} ${vehicle.model}" class="w-full h-48 object-cover">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">${vehicle.brand} ${vehicle.model}</h3>
+            <p class="text-gray-600">Prix: ${vehicle.price}€</p>
+            <p class="text-gray-600">Kilométrage: ${vehicle.mileage} km</p>
+          </div>
+        `;
+        vehiclesGrid.appendChild(card);
+      });
+    }
+
+    // Apply filters
+    function applyFiltersFunction() {
+      const selectedBrand = brandFilter.value;
+      const maxPrice = parseFloat(priceFilter.value) || Infinity;
+
+      const filtered = allVehicles.filter(vehicle => {
+        return (selectedBrand === '' || vehicle.brand === selectedBrand) &&
+               vehicle.price <= maxPrice;
+      });
+      displayVehicles(filtered);
+    }
+
+    applyFilters.addEventListener('click', applyFiltersFunction);
+
+    // Load on page load
+    loadVehicles();
+  </script>
+</body>
+</html>

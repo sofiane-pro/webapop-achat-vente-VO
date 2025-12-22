@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "brand": "Toyota",
+    "model": "Corolla",
+    "price": 15000,
+    "mileage": 50000,
+    "image": "https://via.placeholder.com/300x200?text=Toyota+Corolla"
+  },
+  {
+    "id": 2,
+    "brand": "Honda",
+    "model": "Civic",
+    "price": 18000,
+    "mileage": 30000,
+    "image": "https://via.placeholder.com/300x200?text=Honda+Civic"
+  },
+  {
+    "id": 3,
+    "brand": "Ford",
+    "model": "Focus",
+    "price": 12000,
+    "mileage": 70000,
+    "image": "https://via.placeholder.com/300x200?text=Ford+Focus"
+  },
+  {
+    "id": 4,
+    "brand": "BMW",
+    "model": "X3",
+    "price": 25000,
+    "mileage": 40000,
+    "image": "https://via.placeholder.com/300x200?text=BMW+X3"
+  },
+  {
+    "id": 5,
+    "brand": "Mercedes",
+    "model": "C-Class",
+    "price": 22000,
+    "mileage": 35000,
+    "image": "https://via.placeholder.com/300x200?text=Mercedes+C-Class"
+  }
+]
