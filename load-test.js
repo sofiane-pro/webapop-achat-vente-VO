@@ -9,7 +9,7 @@ const options = {
 
 console.log("🚀 Lancement du test de charge automatique...");
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 110; i++) {
   const req = http.request(options, (res) => {
     if (res.statusCode === 200) {
       console.log(`Requête ${i+1}: Succès (200 OK)`);
