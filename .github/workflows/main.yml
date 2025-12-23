@@ -1,0 +1,32 @@
+name: JMeter Load Test CI
+
+on: [push]
+
+jobs:
+  jmeter-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Installer et Lancer le Backend
+        run: |
+          cd backend
+          npm install express cors # Installation forcée des modules
+          node server.js & 
+          sleep 10 # On passe à 10 secondes pour être sûr
+          
+      - name: Install JMeter
+        run: |
+          wget https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-5.6.3.tgz
+          tar -xzf apache-jmeter-5.6.3.tgz
+
+      - name: Run JMeter Test
+        run: |
+          ./apache-jmeter-5.6.3/bin/jmeter -n -t test_surcharge_connexion.jmx -l results.jtl
