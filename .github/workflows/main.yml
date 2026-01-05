@@ -30,4 +30,4 @@ jobs:
       - name: Run JMeter Test
         run: |
           # Utilisation du paramètre -J pour piloter ta variable nb_users
-          ./apache-jmeter-5.6.3/bin/jmeter -n -t test_surcharge_connexion.jmx -l results.jtl -Jnb_users=500
+          ./apache-jmeter-5.6.3/bin/jmeter -n -t test_surcharge_connexion.jmx -l results.jtl -Jnb_users=1000
